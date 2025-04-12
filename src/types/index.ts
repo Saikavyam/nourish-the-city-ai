@@ -54,3 +54,17 @@ export interface DonationFormData {
   pickupDeadline: Date;
   location: Location;
 }
+
+// Helper functions to ensure type safety when working with DonationStatus
+export const isDonationStatus = (status: string): status is DonationStatus => {
+  return ['pending', 'accepted', 'picked', 'delivered', 'expired', 'cancelled'].includes(status);
+};
+
+export const ensureDonationStatus = (status: string): DonationStatus => {
+  if (isDonationStatus(status)) {
+    return status;
+  }
+  // Default to pending if invalid status is provided
+  console.warn(`Invalid donation status: ${status}, defaulting to 'pending'`);
+  return 'pending';
+};
