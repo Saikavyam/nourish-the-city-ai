@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,8 +40,16 @@ const DonationsList = ({ donations, showActions = true }: DonationsListProps) =>
     return matchesSearch && matchesFoodType && matchesPerishableType;
   });
 
+  const clearFilters = () => {
+    setSelectedFoodType("all");
+    setSelectedPerishableType("all");
+    setSearchTerm("");
+  };
+
+  const hasActiveFilters = selectedFoodType !== "all" || selectedPerishableType !== "all" || searchTerm !== "";
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-slide-up">
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -52,54 +60,68 @@ const DonationsList = ({ donations, showActions = true }: DonationsListProps) =>
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <Button 
-          variant="outline" 
-          className="flex items-center gap-2"
-          onClick={() => setShowFilters(!showFilters)}
-        >
-          <Filter className="h-4 w-4" />
-          Filters
-        </Button>
+        <div className="flex gap-2">
+          {hasActiveFilters && (
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={clearFilters}
+            >
+              <X className="h-4 w-4" />
+              Clear
+            </Button>
+          )}
+          <Button 
+            variant={showFilters ? "default" : "outline"}
+            className="flex items-center gap-2"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <Filter className="h-4 w-4" />
+            Filters {showFilters ? "▲" : "▼"}
+          </Button>
+        </div>
       </div>
 
       {showFilters && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Food Type
-            </label>
-            <Select 
-              value={selectedFoodType} 
-              onValueChange={(value) => setSelectedFoodType(value as FoodType | "all")}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="All food types" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All food types</SelectItem>
-                <SelectItem value="veg">Vegetarian</SelectItem>
-                <SelectItem value="non-veg">Non-Vegetarian</SelectItem>
-                <SelectItem value="mixed">Mixed</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Perishable Type
-            </label>
-            <Select 
-              value={selectedPerishableType} 
-              onValueChange={(value) => setSelectedPerishableType(value as PerishableType | "all")}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="All perishable types" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All perishable types</SelectItem>
-                <SelectItem value="perishable">Perishable</SelectItem>
-                <SelectItem value="non-perishable">Non-Perishable</SelectItem>
-              </SelectContent>
-            </Select>
+        <div className="bg-gray-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-gray-200 dark:border-zinc-700 animate-slide-up">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                Food Type
+              </label>
+              <Select 
+                value={selectedFoodType} 
+                onValueChange={(value) => setSelectedFoodType(value as FoodType | "all")}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="All food types" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All food types</SelectItem>
+                  <SelectItem value="veg">Vegetarian</SelectItem>
+                  <SelectItem value="non-veg">Non-Vegetarian</SelectItem>
+                  <SelectItem value="mixed">Mixed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                Perishable Type
+              </label>
+              <Select 
+                value={selectedPerishableType} 
+                onValueChange={(value) => setSelectedPerishableType(value as PerishableType | "all")}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="All perishable types" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All perishable types</SelectItem>
+                  <SelectItem value="perishable">Perishable</SelectItem>
+                  <SelectItem value="non-perishable">Non-Perishable</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       )}
@@ -115,8 +137,21 @@ const DonationsList = ({ donations, showActions = true }: DonationsListProps) =>
           ))}
         </div>
       ) : (
-        <div className="text-center py-12">
-          <p className="text-gray-500">No donations found matching your criteria.</p>
+        <div className="text-center py-16 bg-gray-50 dark:bg-zinc-800/50 rounded-xl border border-gray-200 dark:border-zinc-700">
+          <div className="mx-auto w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 dark:bg-zinc-700 mb-4">
+            <Search className="h-8 w-8 text-gray-400 dark:text-gray-500" />
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-1">No donations found</h3>
+          <p className="text-gray-500 dark:text-gray-400">Try adjusting your search or filters</p>
+          {hasActiveFilters && (
+            <Button 
+              variant="link" 
+              className="mt-3 text-zerowaste-600 dark:text-zerowaste-400"
+              onClick={clearFilters}
+            >
+              Clear all filters
+            </Button>
+          )}
         </div>
       )}
     </div>
