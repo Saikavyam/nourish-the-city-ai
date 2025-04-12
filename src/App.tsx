@@ -18,32 +18,35 @@ import DonationForm from "./pages/DonationForm";
 import DonationDetail from "./pages/DonationDetail";
 import NotFound from "./pages/NotFound";
 
+// Create a client
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <UserProvider>
-        <SidebarProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/donor/*" element={<DonorDashboard />} />
-              <Route path="/recipient/*" element={<RecipientDashboard />} />
-              <Route path="/admin/*" element={<AdminDashboard />} />
-              <Route path="/map" element={<MapView />} />
-              <Route path="/donation/new" element={<DonationForm />} />
-              <Route path="/donation/:id" element={<DonationDetail />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-          <Toaster />
-          <Sonner />
-        </SidebarProvider>
-      </UserProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <UserProvider>
+          <SidebarProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/auth" element={<AuthPage />} />
+                <Route path="/donor/*" element={<DonorDashboard />} />
+                <Route path="/recipient/*" element={<RecipientDashboard />} />
+                <Route path="/admin/*" element={<AdminDashboard />} />
+                <Route path="/map" element={<MapView />} />
+                <Route path="/donation/new" element={<DonationForm />} />
+                <Route path="/donation/:id" element={<DonationDetail />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+            <Toaster />
+            <Sonner />
+          </SidebarProvider>
+        </UserProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

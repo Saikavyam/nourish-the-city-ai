@@ -41,6 +41,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { mockDonations, getFoodTypeLabel, getPerishableTypeLabel, getStatusColor } from "@/data/mockData";
 import { useUser } from "@/contexts/UserContext";
+import { DonationStatus, ensureDonationStatus } from "@/types";
 
 const DonationDetail = () => {
   const { id } = useParams();
@@ -81,7 +82,7 @@ const DonationDetail = () => {
     setTimeout(() => {
       const updatedDonation = {
         ...donation,
-        status: "accepted",
+        status: ensureDonationStatus("accepted"),
         recipientId: user?.id || "",
         recipientName: user?.name || "",
       };
@@ -103,7 +104,7 @@ const DonationDetail = () => {
     setTimeout(() => {
       const updatedDonation = {
         ...donation,
-        status: "picked",
+        status: ensureDonationStatus("picked"),
       };
       
       setDonation(updatedDonation);
