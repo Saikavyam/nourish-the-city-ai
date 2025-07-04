@@ -10,7 +10,7 @@
 🔗 **Live Deployment**:*(https://nourish-the-city-ai.vercel.app/)* 
 📌 **Recruiter Note**: Demonstrates full-stack ML implementation with measurable social impact
 
-![System Architecture](https://nourish-the-city-ai.vercel.app/architecture.png)
+
 
 ---
 
